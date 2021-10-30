@@ -5,16 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using SalesWebMvc.Services;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.ViewModels;
+
 
 namespace SalesWebMvc.Controllers
 {
     public class SellersController : Controller
     {
         private readonly SellerService _sellerService;
+        private readonly DepartmentService _deparmentService;
 
-        public SellersController (SellerService sellerService)
+        public SellersController (SellerService sellerService, DepartmentService deparmentService)
         {
             _sellerService = sellerService;
+            _deparmentService = deparmentService;
         }
 
         public IActionResult Index()
@@ -25,7 +29,9 @@ namespace SalesWebMvc.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var departments = _deparmentService.FindAll();
+            var viewModel = new SellerFormViewModel { Departments = departments };
+            return View(viewModel);
         }
 
         [HttpPost]
